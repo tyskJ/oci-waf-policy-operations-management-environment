@@ -11,6 +11,15 @@ set -euo pipefail
 timedatectl set-timezone Asia/Tokyo
 systemctl restart rsyslog
 
+# Swap 変更 (defalt 1.5GiB)
+# langpacks-ja インストール時にMAXで4GiB使っていたため、SWAP拡張で対応
+# 元々/etc/fstabには永続化設定は入っているためコマンド実行はしない
+swapoff /.swapfile
+fallocate -l 5G /.swapfile
+chmod 600 /.swapfile
+mkswap /.swapfile
+swapon /.swapfile
+
 # Locale
 dnf install -y langpacks-ja
 localectl set-locale LANG=ja_JP.utf8

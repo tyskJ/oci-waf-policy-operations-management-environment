@@ -91,6 +91,7 @@ resource "oci_waf_web_app_firewall_policy" "this" {
   request_rate_limiting {
     ### rulesの記載順序=評価順
     ### 上から評価さる
+    ### Conditionはオプション。指定しない場合は全リクエスト対象
     rules {
       type               = "REQUEST_RATE_LIMITING"
       name               = "rate-limit"
@@ -108,12 +109,6 @@ resource "oci_waf_web_app_firewall_policy" "this" {
   # }
   defined_tags = local.common_defined_tags
 }
-
-# import {
-#   to = oci_waf_web_app_firewall_policy.test
-#   id = "ocid1.webappfirewallpolicy.oc1.ap-tokyo-1.amaaaaaakipmm7ya3nhg4kdg5krl3nopraydhlerml4dvwz5us7omdo5kqia"
-# }
-
 
 /************************************************************
 Regional WAF - FLB Attached

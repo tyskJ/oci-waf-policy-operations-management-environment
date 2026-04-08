@@ -103,10 +103,16 @@ resource "oci_waf_web_app_firewall_policy" "this" {
       action_name = "Custom-configured-429-response-code-action"
     }
   }
+  ### Response access rules
+  # response_access_control {
+  # }
   defined_tags = local.common_defined_tags
 }
 
-
+# import {
+#   to = oci_waf_web_app_firewall_policy.test
+#   id = "ocid1.webappfirewallpolicy.oc1.ap-tokyo-1.amaaaaaakipmm7ya3nhg4kdg5krl3nopraydhlerml4dvwz5us7omdo5kqia"
+# }
 
 
 /************************************************************

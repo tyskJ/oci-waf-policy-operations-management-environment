@@ -49,6 +49,21 @@ resource "oci_waf_web_app_firewall_policy" "this" {
       value = "application/json"
     }
   }
+  ## Custom
+  actions {
+    code = 429
+    name = "Custom-configured-429-response-code-action"
+    type = "RETURN_HTTP_RESPONSE"
+    body {
+      template = jsonencode({
+        code      = "429"
+        message   = "Too Many Requests"
+        RequestId = "$${http.request.id}"
+      })
+      text = null
+      type = "DYNAMIC"
+    }
+  }
   ### Request access rules
   request_access_control {
     ### rulesの記載順序=評価順
@@ -71,6 +86,22 @@ resource "oci_waf_web_app_firewall_policy" "this" {
       action_name        = "Pre-configured 401 Response Code Action"
     }
     default_action_name = "Pre-configured Allow Action" # "Pre-configured Allow Action" or "Pre-configured 401 Response Code Action" or Custom
+  }
+  ### Rate limiting
+  request_rate_limiting {
+    ### rulesの記載順序=評価順
+    ### 上から評価さる
+    rules {
+      type               = "REQUEST_RATE_LIMITING"
+      name               = "rate-limit"
+      condition_language = "JMESPATH"
+      configurations {
+        requests_limit             = 1
+        period_in_seconds          = 1
+        action_duration_in_seconds = 0
+      }
+      action_name = "Custom-configured-429-response-code-action"
+    }
   }
   defined_tags = local.common_defined_tags
 }

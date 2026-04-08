@@ -49,7 +49,7 @@ resource "oci_waf_web_app_firewall_policy" "this" {
       value = "application/json"
     }
   }
-  ### Default Actions of Request access rules
+  ### Request access rules
   request_access_control {
     ### rulesの記載順序=評価順
     ### 上から評価さる
@@ -74,6 +74,7 @@ resource "oci_waf_web_app_firewall_policy" "this" {
   }
   defined_tags = local.common_defined_tags
 }
+
 
 
 

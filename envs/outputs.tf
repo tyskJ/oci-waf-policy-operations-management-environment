@@ -29,3 +29,10 @@ output "xss_request" {
     http://${oci_core_public_ip.flb.ip_address}/?&lt;pstyle="background:url(javascript:alert(1))"&gt;
   EOT
 }
+
+output "sqli_request" {
+  # value = "http://${oci_core_public_ip.flb.ip_address}/?id=1′ UNION SELECT NULL,username,password FROM users"
+  value = <<-EOT
+    http://${oci_core_public_ip.flb.ip_address}/?id=1%27%20UNION%20SELECT%20NULL,username,password%20FROM%20users
+  EOT
+}

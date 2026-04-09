@@ -22,3 +22,10 @@ Web URL
 output "web_url" {
   value = "http://${oci_core_public_ip.flb.ip_address}/"
 }
+
+output "xss_request" {
+  # value = "http://${oci_core_public_ip.flb.ip_address}/?<pstyle="background:url(javascript:alert(1))">"
+  value = <<-EOT
+    http://${oci_core_public_ip.flb.ip_address}/?&lt;pstyle="background:url(javascript:alert(1))"&gt;
+  EOT
+}

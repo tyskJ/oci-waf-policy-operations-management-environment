@@ -126,8 +126,18 @@ OCI WAF ポリシーの運用管理環境を整備してみた
 
 .. code-block:: bash
 
+  NAMESPACE=$(oci os ns get \
+    --compartment-id "${TENANCY_ID}" \
+    --profile ADMIN \
+    --auth security_token \
+    --query "data" \
+    --raw-output)
+
+.. code-block:: bash
+
   cat <<EOF > oci.auto.tfvars
   tenancy_ocid = "${TENANCY_ID}"
+  namespace = "${NAMESPACE}"
   source_ip = "接続元IPアドレス(CIDR形式)"
   subscription_email = "Notifications用メールアドレス"
   EOF

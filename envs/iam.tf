@@ -58,3 +58,22 @@ IAM Policy - For Ingestion Audit Log
 #   ]
 #   defined_tags = local.common_defined_tags
 # }
+
+/************************************************************
+IAM Policy - For Connector Hub
+************************************************************/
+resource "oci_identity_policy" "connhub_loganalytics" {
+  compartment_id = oci_identity_compartment.workload.id
+  description    = "Allow Log Push to LogAnalytics Policy."
+  name           = "allow-log-push-loganalytics-policy"
+  statements = [
+    format(
+      ### allow service serviceconnector は無い
+      "allow any-user to {LOG_ANALYTICS_LOG_GROUP_UPLOAD_LOGS} in compartment %s where all {request.principal.type='serviceconnector', request.principal.compartment.id='%s', target.loganalytics-log-group.id='%s'}",
+      oci_identity_compartment.workload.name,
+      oci_identity_compartment.workload.id,
+      oci_log_analytics_log_analytics_log_group.this.id
+    )
+  ]
+  defined_tags = local.common_defined_tags
+}

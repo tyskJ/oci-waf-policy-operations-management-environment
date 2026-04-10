@@ -20,7 +20,9 @@ SSH port forwarding
 Web URL
 ************************************************************/
 output "web_url" {
-  value = "http://${oci_core_public_ip.flb.ip_address}/"
+  value = <<-EOT
+    http://${oci_core_public_ip.flb.ip_address}/
+  EOT
 }
 
 output "xss_request" {

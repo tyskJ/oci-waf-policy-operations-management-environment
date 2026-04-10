@@ -138,6 +138,7 @@ OCI WAF ポリシーの運用管理環境を整備してみた
   cat <<EOF > oci.auto.tfvars
   tenancy_ocid = "${TENANCY_ID}"
   namespace = "${NAMESPACE}"
+  loganalytics_onboard = true
   source_ip = "接続元IPアドレス(CIDR形式)"
   subscription_email = "Notifications用メールアドレス"
   EOF

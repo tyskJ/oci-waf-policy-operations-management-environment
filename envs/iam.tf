@@ -2,7 +2,7 @@
 IAM Policy - For Log Analytics Enable
 ************************************************************/
 resource "oci_identity_policy" "lgan_enable" {
-  compartment_id = oci_identity_compartment.workload.id
+  compartment_id = var.tenancy_ocid
   description    = "These policies were automatically created when you were enabling Log Analytics."
   name           = "logging_analytics_automatic_service_policies"
   statements = [
@@ -22,7 +22,7 @@ resource "oci_identity_policy" "lgan_enable" {
 IAM Policy - For Ingestion Audit Log
 ************************************************************/
 # resource "oci_identity_policy" "lgan_ingestion_auditlog" {
-#   compartment_id = oci_identity_compartment.workload.id
+#   compartment_id = var.tenancy_ocid
 #   description    = "These policies were automatically created when you set up ingestion for Log Analytics"
 #   name           = "logging_analytics_automatic_ingestion_policies"
 #   statements = [

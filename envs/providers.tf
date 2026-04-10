@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "oci" {
-  auth                = "SecurityToken"
+  auth                = "SecurityToken" # SecurityToken or APIKey
   config_file_profile = "ADMIN"
   region              = "ap-tokyo-1"
   ignore_defined_tags = [

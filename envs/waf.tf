@@ -1,16 +1,16 @@
-/************************************************************
-Network Address Lists
-************************************************************/
-### CIDR
-resource "oci_waf_network_address_list" "this" {
-  compartment_id = oci_identity_compartment.workload.id
-  display_name   = "white-list"
-  type           = "ADDRESSES" # or VCN_ADDRESSES
-  addresses = [
-    var.source_ip
-  ]
-  defined_tags = local.common_defined_tags
-}
+# /************************************************************
+# Network Address Lists
+# ************************************************************/
+# ### CIDR
+# resource "oci_waf_network_address_list" "this" {
+#   compartment_id = oci_identity_compartment.workload.id
+#   display_name   = "white-list"
+#   type           = "ADDRESSES" # or VCN_ADDRESSES
+#   addresses = [
+#     var.source_ip
+#   ]
+#   defined_tags = local.common_defined_tags
+# }
 
 # /************************************************************
 # Regional WAF Policy

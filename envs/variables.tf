@@ -9,3 +9,7 @@ variable "source_ip" {
 variable "subscription_email" {
   type = string
 }
+
+variable "namespace" {
+  type = string
+}

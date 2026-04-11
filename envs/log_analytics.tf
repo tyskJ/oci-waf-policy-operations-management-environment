@@ -34,7 +34,7 @@ Purge Policy
 ************************************************************/
 resource "oci_log_analytics_namespace_scheduled_task" "purge_log_schedule" {
   compartment_id = oci_identity_compartment.workload.id
-  display_name   = "purge-policy-waf-log-group-weekly"
+  display_name   = "purge-policy-waf-log-weekly"
   kind           = "STANDARD"
   namespace      = var.namespace
   task_type      = "PURGE"
@@ -43,8 +43,9 @@ resource "oci_log_analytics_namespace_scheduled_task" "purge_log_schedule" {
     compartment_id_in_subtree = true
     data_type                 = "LOG"
     purge_duration            = "-P7D"
-    query_string              = "'Log Group' = 'waf-log-group'"
-    type                      = "PURGE"
+    ### 'Log Group' = 'waf-log-group' でロググループ指定も可能
+    query_string = "'Log Source' = 'OCI WAF Logs'"
+    type         = "PURGE"
   }
   schedules {
     schedule {

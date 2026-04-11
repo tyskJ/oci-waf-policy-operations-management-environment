@@ -27,7 +27,6 @@ resource "oci_log_analytics_log_analytics_log_group" "this" {
   display_name   = "waf-log-group"
   description    = "For Regional WAF Log Group"
   namespace      = var.namespace
-  defined_tags   = local.common_defined_tags
 }
 
 /************************************************************
@@ -57,5 +56,4 @@ resource "oci_log_analytics_namespace_scheduled_task" "purge_log_schedule" {
       type              = "CRON"
     }
   }
-  defined_tags = local.common_defined_tags
 }

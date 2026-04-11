@@ -32,7 +32,6 @@ resource "oci_bastion_bastion" "this" {
   dns_proxy_status             = "ENABLED" # Flag to enable FQDN and SOCKS5 Proxy Support.
   client_cidr_block_allow_list = [var.source_ip]
   max_session_ttl_in_seconds   = 10800 # Max minutes (3 hours)
-  defined_tags                 = local.common_defined_tags
 }
 
 /************************************************************

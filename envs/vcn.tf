@@ -9,8 +9,7 @@ resource "oci_core_vcn" "vcn" {
   # 文字から始めること
   # ハイフンとアンダースコアは使用不可
   # 後から変更不可
-  dns_label    = "vcn"
-  defined_tags = local.common_defined_tags
+  dns_label = "vcn"
 }
 
 /************************************************************
@@ -21,7 +20,6 @@ resource "oci_core_security_list" "sl_flb" {
   compartment_id = oci_identity_compartment.workload.id
   vcn_id         = oci_core_vcn.vcn.id
   display_name   = "sl-flb"
-  defined_tags   = local.common_defined_tags
 }
 
 ##### For System
@@ -29,7 +27,6 @@ resource "oci_core_security_list" "sl_system" {
   compartment_id = oci_identity_compartment.workload.id
   vcn_id         = oci_core_vcn.vcn.id
   display_name   = "sl-system"
-  defined_tags   = local.common_defined_tags
 }
 
 ##### For Bastion
@@ -37,7 +34,6 @@ resource "oci_core_security_list" "sl_bastion" {
   compartment_id = oci_identity_compartment.workload.id
   vcn_id         = oci_core_vcn.vcn.id
   display_name   = "sl-bastion"
-  defined_tags   = local.common_defined_tags
   # セッションを張る際は、Bastion Private Endpoint が送信元となる
   # Bastion Private Endpoint がターゲットリソースと同一サブネットでも、許可する必要がある点注意
   # Bastion Private Endpoint は NSG で制御できないので、SL での制御が必要
@@ -74,7 +70,6 @@ resource "oci_core_subnet" "public_flb" {
   # 基本的には、値を揃えるか、どちらか一方を明記すること
   prohibit_internet_ingress  = false
   prohibit_public_ip_on_vnic = false
-  defined_tags               = local.common_defined_tags
 }
 
 ### For System
@@ -94,7 +89,6 @@ resource "oci_core_subnet" "private_system" {
   # 基本的には、値を揃えるか、どちらか一方を明記すること
   prohibit_internet_ingress  = true
   prohibit_public_ip_on_vnic = true
-  defined_tags               = local.common_defined_tags
 }
 
 ### For Bastion
@@ -114,7 +108,6 @@ resource "oci_core_subnet" "private_bastion" {
   # 基本的には、値を揃えるか、どちらか一方を明記すること
   prohibit_internet_ingress  = true
   prohibit_public_ip_on_vnic = true
-  defined_tags               = local.common_defined_tags
 }
 
 /************************************************************
@@ -124,7 +117,6 @@ resource "oci_core_internet_gateway" "igw" {
   compartment_id = oci_identity_compartment.workload.id
   vcn_id         = oci_core_vcn.vcn.id
   display_name   = "igw"
-  defined_tags   = local.common_defined_tags
 }
 
 /************************************************************
@@ -134,7 +126,6 @@ resource "oci_core_nat_gateway" "nat_gateway" {
   compartment_id = oci_identity_compartment.workload.id
   vcn_id         = oci_core_vcn.vcn.id
   display_name   = "nat-gateway"
-  defined_tags   = local.common_defined_tags
 }
 
 /************************************************************
@@ -150,7 +141,6 @@ resource "oci_core_route_table" "rtb_flb" {
     destination       = "0.0.0.0/0"
     destination_type  = "CIDR_BLOCK"
   }
-  defined_tags = local.common_defined_tags
 }
 
 resource "oci_core_route_table_attachment" "attachment_flb" {
@@ -168,7 +158,6 @@ resource "oci_core_route_table" "rtb_system" {
     destination       = "0.0.0.0/0"
     destination_type  = "CIDR_BLOCK"
   }
-  defined_tags = local.common_defined_tags
 }
 
 resource "oci_core_route_table_attachment" "attachment_system" {
@@ -181,7 +170,6 @@ resource "oci_core_route_table" "rtb_bastion" {
   compartment_id = oci_identity_compartment.workload.id
   vcn_id         = oci_core_vcn.vcn.id
   display_name   = "rtb-bastion"
-  defined_tags   = local.common_defined_tags
 }
 
 resource "oci_core_route_table_attachment" "attachment_bastion" {
@@ -197,7 +185,6 @@ resource "oci_core_network_security_group" "sg_flb" {
   compartment_id = oci_identity_compartment.workload.id
   vcn_id         = oci_core_vcn.vcn.id
   display_name   = "sg-flb"
-  defined_tags   = local.common_defined_tags
 }
 
 resource "oci_core_network_security_group_security_rule" "sg_flb_ingress_http" {
@@ -235,7 +222,6 @@ resource "oci_core_network_security_group" "sg_oracle" {
   compartment_id = oci_identity_compartment.workload.id
   vcn_id         = oci_core_vcn.vcn.id
   display_name   = "sg-oracle"
-  defined_tags   = local.common_defined_tags
 }
 
 resource "oci_core_network_security_group_security_rule" "sg_oracle_ingress_ssh" {

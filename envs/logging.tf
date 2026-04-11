@@ -6,7 +6,6 @@ resource "oci_logging_log_group" "this" {
   compartment_id = oci_identity_compartment.workload.id
   display_name   = "regional-waf-log-group"
   description    = "For Regional WAF Log Group"
-  defined_tags   = local.common_defined_tags
 }
 
 /************************************************************
@@ -29,5 +28,4 @@ resource "oci_logging_log" "this" {
   }
   log_group_id       = oci_logging_log_group.this.id
   retention_duration = 30
-  defined_tags       = local.common_defined_tags
 }

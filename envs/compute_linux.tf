@@ -137,10 +137,6 @@ resource "oci_core_instance" "oracle_instance" {
     ssh_authorized_keys = tls_private_key.ssh_keygen_oracle.public_key_openssh
     user_data           = base64encode(file("./userdata/oraclelinux_init.sh"))
   }
-  defined_tags = {
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_env.tag_definition_name)                = "prd"
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_managedbyterraform.tag_definition_name) = "true"
-  }
   lifecycle {
     ignore_changes = [metadata]
   }

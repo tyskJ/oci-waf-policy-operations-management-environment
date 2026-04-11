@@ -52,17 +52,3 @@ resource "oci_identity_tag_default" "key_system" {
   # →trueにして、リソース作成時に強制明記させる必要がない
   is_required = false
 }
-
-resource "oci_identity_tag_default" "key_env" {
-  compartment_id    = oci_identity_compartment.workload.id
-  tag_definition_id = oci_identity_tag.key_env.id
-  value             = "prd"
-  is_required       = true
-}
-
-resource "oci_identity_tag_default" "key_managedbyterraform" {
-  compartment_id    = oci_identity_compartment.workload.id
-  tag_definition_id = oci_identity_tag.key_managedbyterraform.id
-  value             = "true"
-  is_required       = true
-}

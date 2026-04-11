@@ -9,7 +9,7 @@ resource "oci_waf_network_address_list" "this" {
   addresses = [
     var.source_ip
   ]
-  defined_tags = local.common_defined_tags
+
 }
 
 /************************************************************
@@ -279,7 +279,7 @@ resource "oci_waf_web_app_firewall_policy" "this" {
       }
     }
   }
-  defined_tags = local.common_defined_tags
+
 }
 
 /************************************************************
@@ -291,5 +291,5 @@ resource "oci_waf_web_app_firewall" "this" {
   backend_type               = "LOAD_BALANCER"
   load_balancer_id           = oci_load_balancer_load_balancer.flb.id
   web_app_firewall_policy_id = oci_waf_web_app_firewall_policy.this.id
-  defined_tags               = local.common_defined_tags
+
 }

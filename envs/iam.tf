@@ -11,7 +11,6 @@ resource "oci_identity_dynamic_group" "lgan_sch" {
     "ALL {resource.type='loganalyticsscheduledtask', resource.compartment.id='%s'}",
     oci_identity_compartment.workload.id
   )
-  defined_tags = local.common_defined_tags
 }
 
 /************************************************************
@@ -31,7 +30,6 @@ resource "oci_identity_policy" "lgan_enable" {
     "allow service loganalytics to READ loganalytics-features-family in tenancy",
     "allow service loganalytics to READ compartments in tenancy",
   ]
-  defined_tags = local.common_defined_tags
 }
 
 /************************************************************
@@ -72,7 +70,6 @@ IAM Policy - For Ingestion Audit Log
 #     "allow resource loganalyticsvrp LogAnalyticsVirtualResource to {ADM_REMEDIATION_RECIPE_READ} in tenancy",
 #     "allow any-user to {LOG_ANALYTICS_LOG_GROUP_UPLOAD_LOGS} in compartment id XXX where all {request.principal.type='serviceconnector', target.loganalytics-log-group.id='XXX', request.principal.compartment.id='XXX'}",
 #   ]
-#   defined_tags = local.common_defined_tags
 # }
 
 /************************************************************
@@ -108,7 +105,6 @@ resource "oci_identity_policy" "lgan_purge" {
       oci_identity_dynamic_group.lgan_sch.name
     )
   ]
-  defined_tags = local.common_defined_tags
 }
 
 /************************************************************
@@ -134,5 +130,4 @@ resource "oci_identity_policy" "connhub_loganalytics" {
       oci_identity_compartment.workload.id
     )
   ]
-  defined_tags = local.common_defined_tags
 }

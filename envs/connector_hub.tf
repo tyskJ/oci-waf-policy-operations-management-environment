@@ -30,7 +30,6 @@ resource "oci_sch_service_connector" "check_log" {
     kind                       = "loggingAnalytics"
     log_group_id               = oci_log_analytics_log_analytics_log_group.this.id
   }
-  defined_tags = local.common_defined_tags
 }
 
 resource "oci_sch_service_connector" "block_log" {
@@ -61,7 +60,6 @@ resource "oci_sch_service_connector" "block_log" {
     kind                       = "loggingAnalytics"
     log_group_id               = oci_log_analytics_log_analytics_log_group.this.id
   }
-  defined_tags = local.common_defined_tags
 }
 
 ### Logging to Notifications
@@ -93,7 +91,6 @@ resource "oci_sch_service_connector" "check_notifications" {
     kind                       = "notifications"
     topic_id                   = oci_ons_notification_topic.this.id
   }
-  defined_tags = local.common_defined_tags
 }
 
 resource "oci_sch_service_connector" "block_notifications" {
@@ -124,5 +121,4 @@ resource "oci_sch_service_connector" "block_notifications" {
     kind                       = "notifications"
     topic_id                   = oci_ons_notification_topic.this.id
   }
-  defined_tags = local.common_defined_tags
 }

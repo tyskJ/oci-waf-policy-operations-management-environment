@@ -29,3 +29,33 @@ resource "oci_log_analytics_log_analytics_log_group" "this" {
   namespace      = var.namespace
   defined_tags   = local.common_defined_tags
 }
+
+/************************************************************
+Purge Policy
+************************************************************/
+resource "oci_log_analytics_namespace_scheduled_task" "purge_log_schedule" {
+  compartment_id = oci_identity_compartment.workload.id
+  display_name   = "purge-policy-waf-log-group-weekly"
+  kind           = "STANDARD"
+  namespace      = var.namespace
+  task_type      = "PURGE"
+  action {
+    purge_compartment_id      = var.tenancy_ocid
+    compartment_id_in_subtree = true
+    data_type                 = "LOG"
+    purge_duration            = "-P7D"
+    query_string              = "'Log Group' = 'waf-log-group'"
+    type                      = "PURGE"
+  }
+  schedules {
+    schedule {
+      expression        = "0 0 11 ? * 1"
+      misfire_policy    = "RETRY_INDEFINITELY"
+      query_offset_secs = 0
+      repeat_count      = 0
+      time_zone         = "Asia/Tokyo"
+      type              = "CRON"
+    }
+  }
+  defined_tags = local.common_defined_tags
+}

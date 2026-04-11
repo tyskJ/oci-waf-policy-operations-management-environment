@@ -1,4 +1,20 @@
 /************************************************************
+Dynamic Group - Log Analytics Scheduled Task
+************************************************************/
+# 「oci_identity_dynamic_group」を使用する場合はルートコンパートメントのDefaultアイデンティティドメインにしか作成できない
+# 「oci_identity_domains_dynamic_resource_group」を使用すれば、指定のアイデンティティドメインに作成可能
+resource "oci_identity_dynamic_group" "lgan_sch" {
+  compartment_id = var.tenancy_ocid
+  name           = "Log_Analytics_Scheduled_Task"
+  description    = "Log Analytics Scheduled Task"
+  matching_rule = format(
+    "ALL {resource.type='loganalyticsscheduledtask', resource.compartment.id='%s'}",
+    oci_identity_compartment.workload.id
+  )
+  defined_tags = local.common_defined_tags
+}
+
+/************************************************************
 IAM Policy - For Log Analytics Enable
 ************************************************************/
 resource "oci_identity_policy" "lgan_enable" {
@@ -58,6 +74,42 @@ IAM Policy - For Ingestion Audit Log
 #   ]
 #   defined_tags = local.common_defined_tags
 # }
+
+/************************************************************
+IAM Policy - For Log Analytics Storage Purge Policy
+************************************************************/
+resource "oci_identity_policy" "lgan_purge" {
+  compartment_id = var.tenancy_ocid
+  description    = "These policies were Purge Log Analytics Storage."
+  name           = "allow-log-analytics-purge-policy"
+  statements = [
+    format(
+      "allow dynamic-group %s to read compartments in tenancy",
+      oci_identity_dynamic_group.lgan_sch.name
+    ),
+    format(
+      "allow dynamic-group %s to {LOG_ANALYTICS_STORAGE_PURGE} in tenancy",
+      oci_identity_dynamic_group.lgan_sch.name
+    ),
+    format(
+      "allow dynamic-group %s to {LOG_ANALYTICS_STORAGE_WORK_REQUEST_CREATE} in tenancy",
+      oci_identity_dynamic_group.lgan_sch.name
+    ),
+    format(
+      "allow dynamic-group %s to {LOG_ANALYTICS_LOG_GROUP_DELETE_LOGS} in tenancy",
+      oci_identity_dynamic_group.lgan_sch.name
+    ),
+    format(
+      "allow dynamic-group %s to {LOG_ANALYTICS_QUERY_VIEW} in tenancy",
+      oci_identity_dynamic_group.lgan_sch.name
+    ),
+    format(
+      "allow dynamic-group %s to {LOG_ANALYTICS_QUERYJOB_WORK_REQUEST_READ} in tenancy",
+      oci_identity_dynamic_group.lgan_sch.name
+    )
+  ]
+  defined_tags = local.common_defined_tags
+}
 
 /************************************************************
 IAM Policy - For Connector Hub

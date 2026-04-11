@@ -1,1 +1,0 @@
-oci log-analytics work-request get --namespace-name nr3gbibwmqfk --work-request-id ocid1.coreservicesworkrequest.region1..aaaaaaaa4v5a3pywzty6igzlvbggl4nz7y37xud7wg2jvoqviz4kpqa4qyuq --profile ADMIN --auth security_token

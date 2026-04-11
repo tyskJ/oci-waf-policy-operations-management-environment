@@ -67,12 +67,19 @@ resource "oci_identity_policy" "connhub_loganalytics" {
   description    = "Allow Log Push to LogAnalytics Policy."
   name           = "allow-log-push-loganalytics-policy"
   statements = [
+    ### allow service serviceconnector は無い
     format(
-      ### allow service serviceconnector は無い
+      ### Upload to LogAnalytics
       "allow any-user to {LOG_ANALYTICS_LOG_GROUP_UPLOAD_LOGS} in compartment %s where all {request.principal.type='serviceconnector', request.principal.compartment.id='%s', target.loganalytics-log-group.id='%s'}",
       oci_identity_compartment.workload.name,
       oci_identity_compartment.workload.id,
       oci_log_analytics_log_analytics_log_group.this.id
+    ),
+    format(
+      ### Use to Notifications
+      "allow any-user to use ons-topics in compartment %s where all {request.principal.type= 'serviceconnector', request.principal.compartment.id='%s'}",
+      oci_identity_compartment.workload.name,
+      oci_identity_compartment.workload.id
     )
   ]
   defined_tags = local.common_defined_tags

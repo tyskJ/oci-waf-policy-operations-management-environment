@@ -91,37 +91,37 @@ resource "terraform_data" "local_exec_create_label" {
   }
 }
 
-/************************************************************
-Ingestion Rule
-************************************************************/
-resource "oci_log_analytics_namespace_ingest_time_rule" "client_ip_block" {
-  depends_on = [
-    terraform_data.local_exec_create_label
-  ]
-  compartment_id = var.tenancy_ocid
-  namespace      = var.namespace
-  display_name   = "waf-official-ip-block-detection-rule"
-  conditions {
-    kind           = "FIELD"
-    field_name     = "mtag"
-    field_operator = "EQUAL"
-    field_value    = "#official_ip"
-    additional_conditions {
-      condition_field    = "mtgttype"
-      condition_operator = "EQUAL"
-      condition_value    = "oci_webappfirewall"
-    }
-    additional_conditions {
-      condition_field    = "SOURCE_NAME"
-      condition_operator = "EQUAL"
-      condition_value    = "ociWAFLogSource"
-    }
-  }
-  actions {
-    type           = "METRIC_EXTRACTION"
-    compartment_id = oci_identity_compartment.workload.id
-    namespace      = "custom_regional_waf"
-    metric_name    = "block_official_ip"
-    dimensions     = []
-  }
-}
+# /************************************************************
+# Ingestion Rule
+# ************************************************************/
+# resource "oci_log_analytics_namespace_ingest_time_rule" "client_ip_block" {
+#   depends_on = [
+#     terraform_data.local_exec_create_label
+#   ]
+#   compartment_id = var.tenancy_ocid
+#   namespace      = var.namespace
+#   display_name   = "waf-official-ip-block-detection-rule"
+#   conditions {
+#     kind           = "FIELD"
+#     field_name     = "mtag"
+#     field_operator = "EQUAL"
+#     field_value    = "#official_ip"
+#     additional_conditions {
+#       condition_field    = "mtgttype"
+#       condition_operator = "EQUAL"
+#       condition_value    = "oci_webappfirewall"
+#     }
+#     additional_conditions {
+#       condition_field    = "SOURCE_NAME"
+#       condition_operator = "EQUAL"
+#       condition_value    = "ociWAFLogSource"
+#     }
+#   }
+#   actions {
+#     type           = "METRIC_EXTRACTION"
+#     compartment_id = oci_identity_compartment.workload.id
+#     namespace      = "custom_regional_waf"
+#     metric_name    = "block_official_ip"
+#     dimensions     = []
+#   }
+# }

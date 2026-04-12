@@ -135,14 +135,26 @@ OCI WAF ポリシーの運用管理環境を整備してみた
 
 .. code-block:: bash
 
+  WORK_USERNAME="作業IAMユーザー名"
+  WORK_USER_OCID=$(oci iam user list \
+    --all \
+    --lifecycle-state ACTIVE \
+    --profile ADMIN \
+    --auth security_token \
+    --query "data[?name=='${WORK_USERNAME}'].id | [0]" \
+    --raw-output
+  )
+
+.. code-block:: bash
+
   cat <<EOF > oci.auto.tfvars
   tenancy_ocid = "${TENANCY_ID}"
   namespace = "${NAMESPACE}"
   loganalytics_onboard = true
   source_ip = "接続元IPアドレス(CIDR形式)"
   subscription_email = "Notifications用メールアドレス"
+  work_user_ocid = "${WORK_USER_OCID}"
   EOF
-
 
 3. *Terraform* 初期化
 ---------------------------------------------------------------------

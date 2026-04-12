@@ -19,3 +19,6 @@ variable "subscription_email" {
   type = string
 }
 
+variable "work_user_ocid" {
+  type = string
+}

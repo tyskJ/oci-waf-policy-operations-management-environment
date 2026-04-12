@@ -156,6 +156,7 @@ OCI WAF ポリシーの運用管理環境を整備してみた
   work_user_ocid = "${WORK_USER_OCID}"
   repo_prefix = "management"
   fn_name = "purge-storage"
+  fn_ocid = ""
   EOF
 
 3. *Terraform* 初期化

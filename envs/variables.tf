@@ -30,3 +30,7 @@ variable "repo_prefix" {
 variable "fn_name" {
   type = string
 }
+
+variable "fn_ocid" {
+  type = string
+}

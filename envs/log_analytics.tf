@@ -26,7 +26,7 @@ resource "oci_log_analytics_log_analytics_log_group" "this" {
   compartment_id = oci_identity_compartment.workload.id
   display_name   = "waf-log-group"
   description    = "For Regional WAF Log Group"
-  namespace      = var.namespace
+  namespace      = oci_log_analytics_namespace.this.namespace
 }
 
 /************************************************************
@@ -36,7 +36,7 @@ resource "oci_log_analytics_namespace_scheduled_task" "purge_log_schedule" {
   compartment_id = oci_identity_compartment.workload.id
   display_name   = "purge-policy-waf-log-weekly"
   kind           = "STANDARD"
-  namespace      = var.namespace
+  namespace      = oci_log_analytics_namespace.this.namespace
   task_type      = "PURGE"
   action {
     purge_compartment_id      = var.tenancy_ocid

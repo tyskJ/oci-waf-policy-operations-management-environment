@@ -154,6 +154,8 @@ OCI WAF ポリシーの運用管理環境を整備してみた
   source_ip = "接続元IPアドレス(CIDR形式)"
   subscription_email = "Notifications用メールアドレス"
   work_user_ocid = "${WORK_USER_OCID}"
+  repo_prefix = "management"
+  fn_name = "purge-storage"
   EOF
 
 3. *Terraform* 初期化

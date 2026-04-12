@@ -22,3 +22,11 @@ variable "subscription_email" {
 variable "work_user_ocid" {
   type = string
 }
+
+variable "repo_prefix" {
+  type = string
+}
+
+variable "fn_name" {
+  type = string
+}

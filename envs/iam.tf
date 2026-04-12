@@ -29,7 +29,7 @@ resource "oci_identity_policy" "lgan_enable" {
     ### For Enabling Log Analytics
     "allow service loganalytics to READ loganalytics-features-family in tenancy",
     "allow service loganalytics to READ compartments in tenancy",
-    ### For Push Metrics
+    ### For Push Metrics From Label
     "allow service loganalytics to use metrics in tenancy",
   ]
 }

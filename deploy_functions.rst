@@ -54,7 +54,7 @@ Functions デプロイ
 .. note::
 
   * ``WORK_USERNAME`` の値は、デプロイ時に指定したユーザー名に変更して実行してください
-  * ``AUTH_TOKEN``の値は ``envs/.key/work_user_auth_token.txt`` に記載の値に変更して実行してください
+  * ``AUTH_TOKEN`` の値は ``envs/.key/work_user_auth_token.txt`` に記載の値に変更して実行してください
 
 .. code-block:: bash
 

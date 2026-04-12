@@ -53,6 +53,6 @@ resource "oci_sch_service_connector" "check_and_block_notifications" {
     batch_time_in_sec          = 0
     enable_formatted_messaging = true
     kind                       = "notifications"
-    topic_id                   = oci_ons_notification_topic.this.id
+    topic_id                   = oci_ons_notification_topic.notify.id
   }
 }

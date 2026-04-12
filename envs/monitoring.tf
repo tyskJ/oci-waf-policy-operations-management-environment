@@ -13,7 +13,7 @@
 #   severity              = "WARNING"
 #   body                  = "Log Analytics Active Storage Used greater than 5 GB. Please Check Log Analytics Storage."
 #   ### Define alarm notifications
-#   destinations       = [oci_ons_notification_topic.this.id]
+#   destinations       = [oci_ons_notification_topic.notify.id]
 #   notification_title = "Log Analytics Active Storage Used greater than 5 GB"
 #   ## Message grouping
 #   is_notifications_per_metric_dimension_enabled = false

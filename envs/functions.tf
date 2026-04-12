@@ -1,0 +1,23 @@
+/************************************************************
+Application
+************************************************************/
+resource "oci_functions_application" "this" {
+  compartment_id = oci_identity_compartment.workload.id
+  display_name   = "management-app"
+  subnet_ids = [
+    oci_core_subnet.private_functions.id
+  ]
+  shape               = "GENERIC_X86"
+  security_attributes = {}
+  config              = {}
+  network_security_group_ids = [
+    oci_core_network_security_group.sg_functions_app.id
+  ]
+  syslog_url = null
+  trace_config {
+    is_enabled = false
+  }
+  image_policy_config {
+    is_policy_enabled = false
+  }
+}

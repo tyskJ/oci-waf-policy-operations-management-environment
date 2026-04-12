@@ -50,6 +50,13 @@ resource "oci_core_security_list" "sl_bastion" {
   }
 }
 
+##### For Functions
+resource "oci_core_security_list" "sl_functions" {
+  compartment_id = oci_identity_compartment.workload.id
+  vcn_id         = oci_core_vcn.vcn.id
+  display_name   = "sl-functions"
+}
+
 /************************************************************
 Subnet
 ************************************************************/
@@ -110,6 +117,25 @@ resource "oci_core_subnet" "private_bastion" {
   prohibit_public_ip_on_vnic = true
 }
 
+### For Functions
+resource "oci_core_subnet" "private_functions" {
+  compartment_id = oci_identity_compartment.workload.id
+  vcn_id         = oci_core_vcn.vcn.id
+  cidr_block     = "10.0.4.0/24"
+  display_name   = "private-functions"
+  # 最大15文字の英数字
+  # 文字から始めること
+  # ハイフンとアンダースコアは使用不可
+  # 後から変更不可
+  dns_label         = "functionsnw"
+  security_list_ids = [oci_core_security_list.sl_functions.id]
+  # prohibit_internet_ingress と prohibit_public_ip_on_vnic は 同様の動き
+  # そのため、２つのパラメータの true/false を互い違いにするとconflictでエラーとなる
+  # 基本的には、値を揃えるか、どちらか一方を明記すること
+  prohibit_internet_ingress  = true
+  prohibit_public_ip_on_vnic = true
+}
+
 /************************************************************
 Internet Gateway
 ************************************************************/
@@ -126,6 +152,20 @@ resource "oci_core_nat_gateway" "nat_gateway" {
   compartment_id = oci_identity_compartment.workload.id
   vcn_id         = oci_core_vcn.vcn.id
   display_name   = "nat-gateway"
+}
+
+/************************************************************
+Service Gateway
+************************************************************/
+resource "oci_core_service_gateway" "service_gateway" {
+  compartment_id = oci_identity_compartment.workload.id
+  vcn_id         = oci_core_vcn.vcn.id
+  display_name   = "service-gateway"
+  services {
+    # All NRT Services In Oracle Services Network
+    service_id = data.oci_core_services.this.services[1].id
+  }
+  # route_table_id = null
 }
 
 /************************************************************
@@ -175,6 +215,23 @@ resource "oci_core_route_table" "rtb_bastion" {
 resource "oci_core_route_table_attachment" "attachment_bastion" {
   subnet_id      = oci_core_subnet.private_bastion.id
   route_table_id = oci_core_route_table.rtb_bastion.id
+}
+
+### For Functions
+resource "oci_core_route_table" "rtb_functions" {
+  compartment_id = oci_identity_compartment.workload.id
+  vcn_id         = oci_core_vcn.vcn.id
+  display_name   = "rtb-functions"
+  route_rules {
+    network_entity_id = oci_core_service_gateway.service_gateway.id
+    destination       = data.oci_core_services.this.services[1].cidr_block
+    destination_type  = "SERVICE_CIDR_BLOCK"
+  }
+}
+
+resource "oci_core_route_table_attachment" "attachment_functions" {
+  subnet_id      = oci_core_subnet.private_functions.id
+  route_table_id = oci_core_route_table.rtb_functions.id
 }
 
 /************************************************************
@@ -261,4 +318,26 @@ resource "oci_core_network_security_group_security_rule" "sg_oracle_egress_all" 
   destination               = "0.0.0.0/0"
   stateless                 = false
   destination_type          = "CIDR_BLOCK"
+}
+
+### For Functions App
+resource "oci_core_network_security_group" "sg_functions_app" {
+  compartment_id = oci_identity_compartment.workload.id
+  vcn_id         = oci_core_vcn.vcn.id
+  display_name   = "sg-functions-app"
+}
+
+resource "oci_core_network_security_group_security_rule" "sg_functions_app_egress_service_gateway" {
+  network_security_group_id = oci_core_network_security_group.sg_functions_app.id
+  protocol                  = "6"
+  direction                 = "EGRESS"
+  destination               = data.oci_core_services.this.services[1].cidr_block
+  stateless                 = false
+  destination_type          = "SERVICE_CIDR_BLOCK"
+  tcp_options {
+    destination_port_range {
+      min = 443
+      max = 443
+    }
+  }
 }

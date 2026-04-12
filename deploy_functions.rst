@@ -3,7 +3,7 @@ Functions デプロイ
 .. note::
 
   * ``CloudShell (Public Network)`` にて実行します
-  * CPU アーキテクチャは ``x86_64`` に変更してください (functions application が ``x86_64`` のため )
+  * CPU アーキテクチャは ``x86_64`` に変更してください (本環境のfunctions application を ``x86_64`` でデプロイしているため)
 
 1. ``context`` アップデート
 ---------------------------------------------------------------------

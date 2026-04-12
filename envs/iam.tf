@@ -133,3 +133,16 @@ resource "oci_identity_policy" "connhub_loganalytics" {
     )
   ]
 }
+
+/************************************************************
+Auth Token
+************************************************************/
+resource "oci_identity_auth_token" "this" {
+  user_id     = var.work_user_ocid
+  description = "For OCI Container Registry Login PW"
+}
+
+resource "local_sensitive_file" "auth_token" {
+  filename = "./.key/work_user_auth_token.txt"
+  content  = oci_identity_auth_token.this.token
+}

@@ -2,9 +2,9 @@
 Connector Hub
 ************************************************************/
 ### Logging to LogAnalytics
-resource "oci_sch_service_connector" "check_log" {
+resource "oci_sch_service_connector" "all_log" {
   compartment_id = oci_identity_compartment.workload.id
-  display_name   = "waf-check-logging-to-loganalytics"
+  display_name   = "waf-all-logging-to-loganalytics"
   state          = "ACTIVE" # ACTIVE or INACTIVE
   source {
     kind = "logging"
@@ -13,42 +13,6 @@ resource "oci_sch_service_connector" "check_log" {
       log_group_id   = oci_logging_log_group.this.id
       log_id         = oci_logging_log.this.id
     }
-  }
-  tasks {
-    batch_size_in_kbs = 0
-    batch_time_in_sec = 0
-    condition         = "data.action='allow' and data.requestProtection='*'"
-    kind              = "logRule"
-  }
-  target {
-    batch_rollover_size_in_mbs = 0
-    batch_rollover_time_in_ms  = 0
-    batch_size_in_kbs          = 0
-    batch_size_in_num          = 0
-    batch_time_in_sec          = 0
-    enable_formatted_messaging = false
-    kind                       = "loggingAnalytics"
-    log_group_id               = oci_log_analytics_log_analytics_log_group.this.id
-  }
-}
-
-resource "oci_sch_service_connector" "block_log" {
-  compartment_id = oci_identity_compartment.workload.id
-  display_name   = "waf-block-logging-to-loganalytics"
-  state          = "ACTIVE" # ACTIVE or INACTIVE
-  source {
-    kind = "logging"
-    log_sources {
-      compartment_id = oci_logging_log_group.this.compartment_id
-      log_group_id   = oci_logging_log_group.this.id
-      log_id         = oci_logging_log.this.id
-    }
-  }
-  tasks {
-    batch_size_in_kbs = 0
-    batch_time_in_sec = 0
-    condition         = "data.action='block'"
-    kind              = "logRule"
   }
   target {
     batch_rollover_size_in_mbs = 0

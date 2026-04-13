@@ -5,7 +5,9 @@ import oci
 
 from fdk import response
 
-
+"""
+EntryPoint
+"""
 def handler(ctx, data: io.BytesIO = None):
     name = "World"
     try:
@@ -21,6 +23,9 @@ def handler(ctx, data: io.BytesIO = None):
         headers={"Content-Type": "application/json"}
     )
 
+"""
+Common Func
+"""
 def success_response(ctx, data: dict, status_code: int=200):
     """成功レスポンスを返す"""
     return response.Response(

@@ -2,6 +2,7 @@ import io
 import json
 import logging
 import oci
+from datetime import datetime, timezone
 
 from fdk import response
 
@@ -36,8 +37,36 @@ def handler(ctx, data: io.BytesIO = None):
             signer=signer
         )
         namespace = os_client.get_namespace().data
+        purge_details = oci.log_analytics.models.PurgeStorageDataDetails(
+           compartment_id=tenancy_id,
+           compartment_id_in_subtree=True,
+           data_type="LOG",
+           purge_query_string="'Log Source' = 'OCI WAF Logs'",
+           time_data_ended=datetime.now(timezone.utc)
+        )
+        resp = log_analytics_client.purge_storage_data(
+            namespace_name=namespace,
+            purge_storage_data_details=purge_details
+        )
+        work_request_id = resp.headers.get("opc-work-request-id")
+        logger.info(
+            "LogAnalytics purge request submitted. "
+            f"log_source=OCI WAF Logs, workRequestId={work_request_id}"
+        )
+        return success_response(
+            ctx,
+            {
+                "message": "LogAnalytics purge request submitted",
+                "log_source": "OCI WAF Logs",
+                "work_request_id": work_request_id
+            },
+            202
+        )
     except oci.exceptions.ServiceError as e:
-        logger.error(f"Purge failed: status={e.status}, code={e.code}, message={e.message}")
+        logger.error(
+            "Purge failed: "
+            f"status={e.status}, code={e.code}, message={e.message}"
+        )
         return error_response(ctx, e.message, e.status)
     except Exception as e:
         logger.error(f"Unexpected error during purge: {e}")

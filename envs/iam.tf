@@ -14,6 +14,21 @@ resource "oci_identity_dynamic_group" "lgan_sch" {
 }
 
 /************************************************************
+Dynamic Group - Functions
+************************************************************/
+# 「oci_identity_dynamic_group」を使用する場合はルートコンパートメントのDefaultアイデンティティドメインにしか作成できない
+# 「oci_identity_domains_dynamic_resource_group」を使用すれば、指定のアイデンティティドメインに作成可能
+resource "oci_identity_dynamic_group" "functions" {
+  compartment_id = var.tenancy_ocid
+  name           = "Functions_Dynamic_Group"
+  description    = "Functions Dynamic Group"
+  matching_rule = format(
+    "All {resource.type = 'fnfunc', instance.compartment.id = '%s'}",
+    oci_identity_compartment.workload.id
+  )
+}
+
+/************************************************************
 IAM Policy - For Log Analytics Enable
 ************************************************************/
 resource "oci_identity_policy" "lgan_enable" {
@@ -130,6 +145,20 @@ resource "oci_identity_policy" "connhub_loganalytics" {
       "allow any-user to use ons-topics in compartment %s where all {request.principal.type= 'serviceconnector', request.principal.compartment.id='%s'}",
       oci_identity_compartment.workload.name,
       oci_identity_compartment.workload.id
+    )
+  ]
+}
+
+/************************************************************
+IAM Policy - For Functions
+************************************************************/
+resource "oci_identity_policy" "functions_loganalytics" {
+  compartment_id = var.tenancy_ocid
+  description    = "OCI Functions Policy for LogAnalytics"
+  name           = "functions-loganalytics-policy"
+  statements = [
+    format("allow dynamic-group %s to use loganalytics-queryjob-work-request in tenancy",
+      oci_identity_dynamic_group.functions.name
     )
   ]
 }

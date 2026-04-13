@@ -21,22 +21,27 @@ def handler(ctx, data: io.BytesIO = None):
         headers={"Content-Type": "application/json"}
     )
 
-def success_response(ctx, data: dict):
+def success_response(ctx, data: dict, status_code: int=200):
     """成功レスポンスを返す"""
     return response.Response(
         ctx,
-        response_data=json.dumps(data, ensure_ascii=False, indent=2),
-        headers={"Content-Type": "application/json"}
+        response_data=json.dumps(
+            data, 
+            ensure_ascii=False, 
+            indent=2
+        ),
+        headers={"Content-Type": "application/json"},
+        status_code=status_code
     )
 
-
-def error_response(ctx, error_message: str):
+def error_response(ctx, error_message: str, status_code: int=500):
     """エラーレスポンスを返す"""
     return response.Response(
         ctx,
-        response_data=json.dumps({
-            "error": error_message
-        }, ensure_ascii=False),
+        response_data=json.dumps(
+            {"error": error_message}, 
+            ensure_ascii=False
+        ),
         headers={"Content-Type": "application/json"},
-        status_code=500
+        status_code=status_code
     )

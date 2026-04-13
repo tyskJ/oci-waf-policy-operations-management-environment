@@ -1,6 +1,7 @@
 import io
 import json
 import logging
+import oci
 
 from fdk import response
 
@@ -18,4 +19,24 @@ def handler(ctx, data: io.BytesIO = None):
         ctx, response_data=json.dumps(
             {"message": "Hello {0}".format(name)}),
         headers={"Content-Type": "application/json"}
+    )
+
+def success_response(ctx, data: dict):
+    """成功レスポンスを返す"""
+    return response.Response(
+        ctx,
+        response_data=json.dumps(data, ensure_ascii=False, indent=2),
+        headers={"Content-Type": "application/json"}
+    )
+
+
+def error_response(ctx, error_message: str):
+    """エラーレスポンスを返す"""
+    return response.Response(
+        ctx,
+        response_data=json.dumps({
+            "error": error_message
+        }, ensure_ascii=False),
+        headers={"Content-Type": "application/json"},
+        status_code=500
     )

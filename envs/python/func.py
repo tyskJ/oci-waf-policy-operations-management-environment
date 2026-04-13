@@ -28,6 +28,20 @@ def handler(ctx, data: io.BytesIO = None):
     except Exception as e:
         logger.error(f"Failed to initialize LogAnalyticsClient: {e}")
         return error_response(ctx, str(e), 500)
+    # ----- 3. Purge 実行 -----
+    try:
+        tenancy_id = signer.tenancy_id
+        os_client = oci.object_storage.ObjectStorageClient(
+            config={},
+            signer=signer
+        )
+        namespace = os_client.get_namespace().data
+    except oci.exceptions.ServiceError as e:
+        logger.error(f"Purge failed: status={e.status}, code={e.code}, message={e.message}")
+        return error_response(ctx, e.message, e.status)
+    except Exception as e:
+        logger.error(f"Unexpected error during purge: {e}")
+        return error_response(ctx, str(e), 500)
 
 """
 Common Func

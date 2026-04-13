@@ -23,7 +23,7 @@ resource "oci_identity_dynamic_group" "functions" {
   name           = "Functions_Dynamic_Group"
   description    = "Functions Dynamic Group"
   matching_rule = format(
-    "All {resource.type = 'fnfunc', instance.compartment.id = '%s'}",
+    "All {resource.type = 'fnfunc', resource.compartment.id = '%s'}",
     oci_identity_compartment.workload.id
   )
 }

@@ -9,19 +9,21 @@ from fdk import response
 EntryPoint
 """
 def handler(ctx, data: io.BytesIO = None):
-    name = "World"
-    try:
-        body = json.loads(data.getvalue())
-        name = body.get("name")
-    except (Exception, ValueError) as ex:
-        logging.getLogger().info('error parsing json payload: ' + str(ex))
+    logger = logging.getLogger()
+    logger.info("LogAnalytics Storage Purge Started")
 
-    logging.getLogger().info("Inside Python Hello World function")
-    return response.Response(
-        ctx, response_data=json.dumps(
-            {"message": "Hello {0}".format(name)}),
-        headers={"Content-Type": "application/json"}
-    )
+    try:
+        # Resource Principal Signer（動的グループの権限を反映）
+        signer = oci.auth.signers.get_resource_principals_signer()
+        logger.info("Resource Principal Signer acquired")
+        return success_response(
+            ctx,
+            {"message": "signer ready"},
+            status_code=200
+        )
+    except Exception as e:
+        logger.error(f"Failed to get Resource Principal Signer: {e}")
+        return error_response(ctx, str(e), status_code=500)
 
 """
 Common Func

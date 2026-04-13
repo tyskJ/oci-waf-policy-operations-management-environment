@@ -11,19 +11,23 @@ EntryPoint
 def handler(ctx, data: io.BytesIO = None):
     logger = logging.getLogger()
     logger.info("LogAnalytics Storage Purge Started")
-
+    # ----- 1. Resource Principal Signer -----
     try:
-        # Resource Principal Signer（動的グループの権限を反映）
         signer = oci.auth.signers.get_resource_principals_signer()
-        logger.info("Resource Principal Signer acquired")
-        return success_response(
-            ctx,
-            {"message": "signer ready"},
-            status_code=200
-        )
+        logger.info("Resource Principal Signer acquired successfully")
     except Exception as e:
         logger.error(f"Failed to get Resource Principal Signer: {e}")
-        return error_response(ctx, str(e), status_code=500)
+        return error_response(ctx, str(e), 500)
+    # ----- 2. Log Analytics Client -----
+    try:
+        log_analytics_client = oci.log_analytics.LogAnalyticsClient(
+            config={},
+            signer=signer
+        )
+        logger.info("LogAnalyticsClient initialized")
+    except Exception as e:
+        logger.error(f"Failed to initialize LogAnalyticsClient: {e}")
+        return error_response(ctx, str(e), 500)
 
 """
 Common Func

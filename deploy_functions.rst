@@ -96,3 +96,10 @@ Functions デプロイ
 
   cd ~/purge-storage
   fn -v deploy --app management-app
+
+5. 実行
+---------------------------------------------------------------------
+.. code-block:: bash
+
+  cd ~/purge-storage
+  fn invoke management-app purge-storage

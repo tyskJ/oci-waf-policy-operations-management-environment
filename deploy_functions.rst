@@ -97,6 +97,10 @@ Functions デプロイ
   cd ~/purge-storage
   fn -v deploy --app management-app
 
+.. note::
+
+  * デプロイする度に、``func.yaml`` の ``version`` が増えていきます
+
 5. 実行
 ---------------------------------------------------------------------
 .. code-block:: bash

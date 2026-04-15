@@ -37,12 +37,13 @@ def handler(ctx, data: io.BytesIO = None):
             signer=signer
         )
         namespace = os_client.get_namespace().data
+        time = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%MZ')
         purge_details = oci.log_analytics.models.PurgeStorageDataDetails(
            compartment_id=tenancy_id,
            compartment_id_in_subtree=True,
            data_type="LOG",
            purge_query_string="'Log Source' = 'OCI WAF Logs'",
-           time_data_ended=datetime.now(timezone.utc)
+           time_data_ended=time
         )
         resp = log_analytics_client.purge_storage_data(
             namespace_name=namespace,

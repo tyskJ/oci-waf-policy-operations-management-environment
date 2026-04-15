@@ -157,7 +157,28 @@ resource "oci_identity_policy" "functions_loganalytics" {
   description    = "OCI Functions Policy for LogAnalytics"
   name           = "functions-loganalytics-policy"
   statements = [
-    format("allow dynamic-group %s to use loganalytics-queryjob-work-request in tenancy",
+    format(
+      "allow dynamic-group %s to read compartments in tenancy",
+      oci_identity_dynamic_group.functions.name
+    ),
+    format(
+      "allow dynamic-group %s to {LOG_ANALYTICS_STORAGE_PURGE} in tenancy",
+      oci_identity_dynamic_group.functions.name
+    ),
+    format(
+      "allow dynamic-group %s to {LOG_ANALYTICS_STORAGE_WORK_REQUEST_CREATE} in tenancy",
+      oci_identity_dynamic_group.functions.name
+    ),
+    format(
+      "allow dynamic-group %s to {LOG_ANALYTICS_LOG_GROUP_DELETE_LOGS} in tenancy",
+      oci_identity_dynamic_group.functions.name
+    ),
+    format(
+      "allow dynamic-group %s to {LOG_ANALYTICS_QUERY_VIEW} in tenancy",
+      oci_identity_dynamic_group.functions.name
+    ),
+    format(
+      "allow dynamic-group %s to {LOG_ANALYTICS_QUERYJOB_WORK_REQUEST_READ} in tenancy",
       oci_identity_dynamic_group.functions.name
     )
   ]

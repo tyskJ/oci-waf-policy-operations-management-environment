@@ -29,6 +29,29 @@ resource "oci_log_analytics_log_analytics_log_group" "this" {
   namespace      = oci_log_analytics_namespace.this.namespace
 }
 
+resource "terraform_data" "purge" {
+  depends_on = [
+    oci_log_analytics_log_analytics_log_group.this
+  ]
+  input = {
+    tenancy_ocid : var.tenancy_ocid,
+    namespace : var.namespace
+  }
+  provisioner "local-exec" {
+    when    = destroy
+    command = <<EOT
+    oci log-analytics storage purge-storage-data \
+    --compartment-id ${self.input.tenancy_ocid} \
+    --namespace-name ${self.input.namespace} \
+    --time-data-ended ${timestamp()} \
+    --compartment-id-in-subtree true \
+    --data-type LOG \
+    --profile ADMIN \
+    --auth security_token
+    EOT
+  }
+}
+
 /************************************************************
 Purge Policy
 ************************************************************/

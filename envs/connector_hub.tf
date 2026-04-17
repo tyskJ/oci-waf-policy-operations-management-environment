@@ -42,7 +42,7 @@ resource "oci_sch_service_connector" "check_and_block_notifications" {
   tasks {
     batch_size_in_kbs = 0
     batch_time_in_sec = 0
-    condition         = "(data.action='block' and data.clientAddr='113.*') or (data.action='allow' and data.requestProtection.matchedRules='*')"
+    condition         = "(data.action='block' and data.clientAddr='113.*') or (data.action='allow' and data.clientAddr='113.*' and data.requestProtection.matchedRules='*')"
     kind              = "logRule"
   }
   target {

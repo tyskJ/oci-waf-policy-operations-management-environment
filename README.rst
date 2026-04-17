@@ -194,13 +194,62 @@ OCI WAF ポリシーの運用管理環境を整備してみた
 
 後片付け - ローカル -
 =====================================================================
-1. 環境削除
+1. LogAnalytics ダッシュボード関連リソース手動削除
+---------------------------------------------------------------------
+.. warning::
+
+  * ダッシュボードと検索クエリは残骸となるため、事前に削除
+
+.. code-block:: bash
+
+  COMPARTMENT_NAME="oci-waf-policy-operations-management-environment"
+  COMPARTMENT_ID=$(oci iam compartment list \
+    --lifecycle-state ACTIVE \
+    --profile ADMIN \
+    --auth security_token \
+    --query "data[?name=='${COMPARTMENT_NAME}'].id | [0]" \
+    --raw-output)
+
+.. code-block:: bash
+
+  DASHBOARD_ID=$(oci management-dashboard dashboard list \
+    --compartment-id ${COMPARTMENT_ID} \
+    --all \
+    --query "data.items[?\"display-name\"=='WAF Dashboard - JP'].id | [0]" \
+    --raw-output \
+    --profile ADMIN \
+    --auth security_token
+  )
+  oci management-dashboard dashboard delete \
+  --management-dashboard-id "${DASHBOARD_ID}" \
+  --force \
+  --profile ADMIN \
+  --auth security_token
+
+.. code-block:: bash
+
+  oci management-dashboard saved-search list \
+    --compartment-id ${COMPARTMENT_ID} \
+    --all \
+    --query 'data.items[].id' \
+    --raw-output \
+    --profile ADMIN \
+    --auth security_token | jq -r '.[]' | while read -r id
+  do
+    oci management-dashboard saved-search delete \
+    --management-saved-search-id "$id" \
+    --force \
+    --profile ADMIN \
+    --auth security_token
+  done
+
+2. 環境削除
 ---------------------------------------------------------------------
 .. code-block:: bash
 
   terraform destroy --auto-approve
 
-2. *tfstate* 用S3バケット削除
+3. *tfstate* 用S3バケット削除
 ---------------------------------------------------------------------
 .. code-block:: bash
 

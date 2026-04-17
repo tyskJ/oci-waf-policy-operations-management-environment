@@ -177,9 +177,10 @@ OCI WAF ポリシーの運用管理環境を整備してみた
 
   terraform apply --auto-approve
 
-6. Functions デプロイ
+6. 手動デプロイ
 ---------------------------------------------------------------------
-* `詳細 <./deploy_functions.rst>`_
+* `Functions <./deploy_functions.rst>`_
+* `Dashboard <./deploy_wafops.rst>`_
 
 7. Subscription デプロイ
 ---------------------------------------------------------------------

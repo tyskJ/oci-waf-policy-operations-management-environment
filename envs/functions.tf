@@ -21,3 +21,22 @@ resource "oci_functions_application" "this" {
     is_policy_enabled = false
   }
 }
+
+resource "terraform_data" "fn_delete" {
+  depends_on = [
+    oci_functions_application.this
+  ]
+  input = {
+    fn_ocid : var.fn_ocid
+  }
+  provisioner "local-exec" {
+    when    = destroy
+    command = <<EOT
+    oci fn function delete \
+    --function-id ${self.input.fn_ocid} \
+    --force \
+    --profile ADMIN \
+    --auth security_token
+    EOT
+  }
+}

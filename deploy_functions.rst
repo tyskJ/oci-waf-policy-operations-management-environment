@@ -81,7 +81,7 @@ Functions デプロイ
 ---------------------------------------------------------------------
 3-1. 関数初期化
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. code-block::
+.. code-block:: bash
 
   FN_NAME="purge-storage"
   fn init --runtime python ${FN_NAME}
@@ -94,8 +94,10 @@ Functions デプロイ
 ---------------------------------------------------------------------
 .. code-block:: bash
 
-  cd ~/purge-storage
-  fn -v deploy --app management-app
+  APP_NAME="management-app"
+  FN_NAME="purge-storage"
+  cd ~/${FN_NAME}
+  fn -v deploy --app ${APP_NAME}
 
 .. note::
 
@@ -105,5 +107,7 @@ Functions デプロイ
 ---------------------------------------------------------------------
 .. code-block:: bash
 
-  cd ~/purge-storage
-  fn invoke management-app purge-storage
+  APP_NAME="management-app"
+  FN_NAME="purge-storage"
+  cd ~/${FN_NAME}
+  fn invoke ${APP_NAME} ${FN_NAME}
